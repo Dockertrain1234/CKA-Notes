@@ -1,3 +1,20 @@
+Skip to content
+ 
+Search Gists
+Search...
+All gists
+Back to GitHub
+@vishymails
+vishymails/CKA aug 2024 Secret
+Last active 5 minutes ago • Report abuse
+Code
+Revisions
+4
+Clone this repository at &lt;script src=&quot;https://gist.github.com/vishymails/aad0a60b98c8c894991ed3cd369ac438.js&quot;&gt;&lt;/script&gt;
+<script src="https://gist.github.com/vishymails/aad0a60b98c8c894991ed3cd369ac438.js"></script>
+CKA aug 2024
+CKA aug 2024
+
 cat > example1.yaml
     5  kubectl create -f example1.yaml
     6  kubectl get pods 
@@ -9,3 +26,59 @@ cat > example1.yaml
    12  kubectl exec -it tomcat-pod -- /bin/sh
    13  kubectl delete pod tomcat-pod 
    14  kubectl delete -f example1.yaml
+
+
+
+
+01) #Create a new pod called admin-pod with image busybox. Allow it to be able to set system_time. Container should sleep for 3200 seconds.
+
+
+
+ 4  alias g=kubectl 
+    5  g get nodes 
+    6  g run admin-pod --image=busybox --dry-run=client -o yaml --command sleep 3200
+    7  g run admin-pod --image=busybox --dry-run=client -o yaml --command sleep 3200 | tee example2.yml
+    8  kubectl create -f admin-pod.yml
+    9  kubectl create -f example2.yml
+   10  kubectl get po 
+   11  kubectl describe pod admin-pod 
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   13  cat > example3.yaml
+   14  kubectl create -f example3.yaml
+   15  kubectl get pods 
+   16  kubectl delete -f example2.yml
+   17  kubectl get pods 
+   18  kubectl get po -o wide 
+   19  kubectl describe rc tomcat-rc 
+   20  kubectl scale rc tomcat-rc --replicas=9
+   21  kubectl describe rc tomcat-rc 
+   22  kubectl get po -o wide 
+   23  kubectl scale rc tomcat-rc --replicas=3
+   24  kubectl get po -o wide 
+   25  kubectl delete rc tomcat-rc 
+   26  kubectl get po -o wide 
+   
+@Dockertrain1234
+Comment
+ 
+Leave a comment
+ 
+Footer
+© 2024 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact
+Manage cookies
+Do not share my personal information
