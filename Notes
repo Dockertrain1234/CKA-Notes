@@ -1,0 +1,11 @@
+cat > example1.yaml
+    5  kubectl create -f example1.yaml
+    6  kubectl get pods 
+    7  kubectl get po
+    8  kubectl get po -o wide 
+    9  kubectl describe pod tomcat-pod 
+   10  kubectl get po -o wide 
+   11  ping 192.168.1.4
+   12  kubectl exec -it tomcat-pod -- /bin/sh
+   13  kubectl delete pod tomcat-pod 
+   14  kubectl delete -f example1.yaml
