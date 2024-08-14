@@ -178,3 +178,250 @@ JOB, DEPLOYMENT, REPLICASETS, DAEMONSETS
    12  kubectl scale rs tomcat-rs --replicas=3
    13  kubectl get po -o wide 
    14  kubectl delete -f example5.yaml
+   
+   
+   
+   
+   
+   
+   
+   tab1 
+   
+    4  cat > example6.yaml
+    5  kubectl create -f example6.yaml 
+    6  kubectl get deploy 
+    7  kubectl get po -o wide 
+    8  kubectl get rs 
+    9  kubectl describe deploy tomcat-deploy 
+   10  kubectl scale deployment tomcat-deploy --replicas=9
+   11  kubectl get po -o wide 
+   12  kubectl get deploy -o wide 
+   13  kubectl set image deploy tomcat-deploy tomcat-containers=nginx:1.9.1
+   14  kubectl rollout status deployment/tomcat-deploy 
+   15  kubectl get deploy -o wide 
+   16  kubectl set image deploy tomcat-deploy tomcat-containers=nginx:1.91 --record
+   17  kubectl get deploy -o wide 
+   18  kubectl rollout status deployment/tomcat-deploy
+   19  history 
+   
+   
+   
+   tab2 
+   
+    3  kubectl rollout history deployment/tomcat-deploy
+    4  kubectl get deploy -o wide 
+    5  kubectl rollout undo deployment/tomcat-deploy 
+    6  kubectl get deploy -o wide 
+    7  history 
+    
+    
+    
+    
+    
+    #Create a new deployment called nginx-deployment with an image nginx:1.16 and 5 replicas. There are 2 worker nodes in our cluster. 
+#Please make sure no pod will get deployed on node7.
+
+apiVersion : apps/v1
+kind : Deployment
+metadata :
+  name : nginx-deployment
+ 
+spec :
+  replicas : 5 
+  selector :
+    matchLabels : 
+      app : nginx
+  
+  template :
+    metadata :
+      labels :
+        app : nginx
+    spec :
+      nodeSelector :
+        kubernetes.io/hostname :
+          notin : [node7, node9]
+      containers :
+        - name : nginx 
+          image : nginx:1.16
+          ports :
+            - containerPort : 80
+
+            
+            
+            
+ Create a new deployment called web-proj-268 with image nginx:1.16 and one replica. Next, upgrade the deployment to version 1.17 using rolling update. 
+Make sure that the version upgrade is recorded in the resource annotation.
+
+
+
+
+
+
+
+Create a new deployment web-003, scale this deployment to 3 replicas, make sure desired number of pods are always running.
+
+
+
+
+
+
+
+
+deploy a web-load-5461 pod using nginx:1.17 with the label set to tier=web
+
+
+
+
+static pods
+
+tab1 
+
+ 4  alias g=kubectl 
+    5  g run static-nginx --image=nginx --dry-run=client -o yaml
+    6  g run static-nginx --image=nginx --dry-run=client -o yaml > example11.yaml
+    7  cat example11.yaml
+    8  cat example11.yaml | ssh node01 "tee static-pod.yaml
+"
+    9  clear
+   10  kubectl get po -o wide 
+   11  history
+   
+tab2 
+
+ 3  ps -ef | grep kubelet 
+    4  sudo grep static /var/lib/kubelet/config.yaml
+    5  ls /etc/kubernetes/manifests
+    6  ls
+    7  sudo cp static-pod.yaml /etc/kubernetes/manifests/.
+    8  ls /etc/kubernetes/manifests
+    9  exit
+    
+    
+    
+    
+    4  cat > example9.yaml
+    5  cat > example9.1.yaml
+    6  kubectl create -f example9.yaml
+    7  kubectl get po -o wide 
+    8  kubectl create -f example9.1.yaml
+    9  kubectl get svc
+   10  kubectl describe service my-service
+   11  kubectl get nodes 
+   12  kubectl get nodes -o wide
+   13  curl http://172.30.2.2:31000
+   
+   
+   
+   3  curl http://192.168.1.4:8080
+    4  curl http://192.168.1.5:8080
+    5  curl http://192.168.1.6:8080
+    6  curl http://192.168.1.7:8080
+    7  curl http://192.168.1.8:8080
+    
+    
+    
+    
+    Expose "audit-web-app" pod to by creating a service "audit-web-app-service" on port 30002 on nodes of given cluster.
+  Note : Now given web application listens on port 8080
+  
+  
+  
+  Create a replicaset (name : web-replica, image=nginx, replicas=3), there is already a pod running in our cluster.  
+ Please make sure that total count of pods running in the cluster is not more than 3.
+ 
+ 
+ 
+ 
+ 
+  4  cat > example11.yaml
+    6  kubectl create -f example11.yaml
+    7  kubectl get po -o wide 
+    8  kubectl exec -it tomcat-pod -- /bin/sh
+    9  clear
+   10  kubectl exec -it tomcat-pod -- /bin/sh
+   11  kubectl get po 
+   12  kubectl delete pod tomcat-pod 
+   14  kubectl create -f example11.yaml
+   15  kubectl exec -it tomcat-pod -- /bin/sh
+   
+   
+   
+   
+   
+   
+   17  cat > example12.yaml
+   18  kubectl create -f example12.yaml
+   19  kubectl get po -o wide 
+   20  kubectl exec -it tomcat-hostpath -- /bin/sh
+   21  kubectl delete -f example12.yaml
+   22  kubectl create -f example12.yaml
+   23  kubectl exec -it tomcat-hostpath -- /bin/sh
+   24  history
+  
+  
+  
+  
+   4  cat > example14.yaml
+    5  kubectl create -f example14.yaml
+    6  kubectl exec -it multicontainer-pod -- /bin/sh 
+    7  kubectl exec -it --container=producer multicontainer-pod -- /bin/sh 
+    
+    tab 2 
+    
+    kubectl exec -it --container=consumer multicontainer-pod -- /bin/sh 
+    
+    
+    
+    
+    
+    
+     4  cat > example19.yaml
+    5  cat > example18.yaml
+    6  cat > example17.yaml
+    7  kubectl create -f example17.yaml -f example18.yaml -f example19.yaml
+    8  kubectl get pv
+    9  kubectl get pvv
+   10  kubectl get pvc
+   11  kubectl get po -o wide 
+   12  kubectl exec -it pv-pod -- /bin/sh
+   13  history
+   
+   
+   
+   controlplane $ ssh node01
+Last login: Sun Nov 13 17:27:09 2022 from 10.48.0.33
+node01 $ cd /mnt/datas
+node01 $ ls
+node01 $ touch t1.txt
+node01 $ touch t2.txt
+node01 $ 
+
+
+
+
+   4  echo -n "admin" | base64 > username.txt
+    5  echo -n "password@123" | base64 > password.txt4
+    7  cat username.txt 
+    8  cat password.txt4 
+      mv  password.txt4 password.txt
+   14  kubectl get secrets 
+   15  kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt 
+   16  kubectl get secrets 
+   17  kubectl describe secrets db-user-pass
+   
+   
+   
+   
+   
+     4  cat > example1.yaml
+    5  kubectl create -f example1.yaml
+    6  kubectl get po 
+    7  kubectl logs tomcat-pod 
+    8  cat > example14.yaml
+    9  kubectl create -f example14.yaml
+   10  kubectl get po 
+   11  kubectl logs multicontainer-pod -c consumer
+   12  kubectl logs multicontainer-pod -c producer 
+   13  kubectl logs tomcat-pod 
+   15  kubectl logs --timestamps tomcat-pod 
+   20  kubectl logs --tail=20 tomcat-pod 
