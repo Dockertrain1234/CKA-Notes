@@ -1,3 +1,4 @@
+
 cat > example1.yaml
     5  kubectl create -f example1.yaml
     6  kubectl get pods 
@@ -425,3 +426,214 @@ node01 $
    13  kubectl logs tomcat-pod 
    15  kubectl logs --timestamps tomcat-pod 
    20  kubectl logs --tail=20 tomcat-pod 
+   
+   
+   
+   
+    4  kubectl get po --all-namespaces
+    5  kubectl get ns 
+    6  kubectl create namespace cka
+    7  kubectl get ns 
+    8  cat > example33.yaml
+    9  kubectl create -f example33.yaml
+   10  kubectl get ns 
+   11  history 
+   
+   
+   
+   
+   12  cat > example34.yaml
+   13  kubectl create -f example34.yaml
+   14  kubectl get po 
+   15  kubectl get po --namespace=my-ns1
+   16  kubectl run my-pod --image=vishymails/tomcatimage:1.0 --namespace=my-ns1
+   17  kubectl run my-pod --image=vishymails/tomcatimage:1.0 --namespace=my-ns2
+   18  kubectl run my-pod --image=vishymails/tomcatimage:1.0
+   19  kubectl get po 
+   20  kubectl get po --namespace=default
+   21  kubectl get po --namespace=my-ns1
+   22  kubectl get po --namespace=my-ns2
+   
+   
+    24  kubectl get ns 
+   25  kubectl get po --namespace default 
+   26  kubectl run my-pod1 --image=vishymails/tomcatimage:1.0 --namespace=my-ns1
+   27  kubectl get po --namespace default 
+   28  kubectl get po --namespace=my-ns1
+   29  kubectl config set-context --current --namespace=my-ns1
+   30  kubectl get po 
+   31  kubectl api-resources
+   32  kubectl api-resources --namespace=false
+   33  kubectl api-resources --namespacetrue
+   34  kubectl api-resources --namespace=true
+   35  kubectl api-resources --namespaced=true
+   36  kubectl api-resources --namespaced=true -o wide 
+   37  kubectl get deployments --all-namesapces
+   38  kubectl get deployments --all-namespaces
+   39  history
+   
+   
+   
+   
+   
+   9  cat > application1.properties
+   10  cat > application2.properties
+   11  kubectl create configmap my-config-map --from-literal=name=bvr --from-literal=Country=India
+   12  kubectl get cm
+   13  kubectl get configmas
+   14  kubectl get configmaps
+   15  kubectl create configmap my-config-map1 --from-file=./application1.properties --from-file=./application2.properties
+   16  kubectl get configmaps
+   
+   
+   
+   
+    4  cat > example38.yaml
+    5  kubectl create -f example38.yaml
+    6  kubectl get po -o wide 
+    7  kubectl get po
+    8  kubectl describe pod init-container-demo
+    9  kubectl logs init-container-demo -c init-container-ubuntu
+   10  kubectl logs init-container-demo -c init-containerbusybox
+   11  kubectl logs init-container-demo -c init-container-busybox
+   12  kubectl logs init-container-demo -c init-container-nginx
+   13  history
+   
+   
+   
+   
+   Backup ETCD database and save it root with name of backup "etcd-backup.db"
+   
+    4  alias g=kubectl 
+    5  g et pods -A | grep etcd 
+    6  g get pods -A | grep etcd 
+    7  g describe pod etcd-controlplane -n kubesystem | grep -A20 -i command
+    8  g describe pod etcd-controlplane -n kube-system | grep -A20 -i command
+    9  cat > backup.sh
+   10  sudo bash ./backup.sh
+   11  cd /root
+   12  ls
+   13  history
+   
+   
+   
+   ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key \
+  snapshot save /root/etcd-backup.db
+  
+  
+  
+  
+  Get web-load-5461 pod details in json format and store it in a file at /opt/output/web-load-5461-j070822n.json
+  
+  
+   cat > /tmp/tomcat.json
+   24 
+   25  kubectl get pods tomcat-pod -o json | sudo tee /tmp/tomcat.json
+   26  cat /tmp/tomcat.json
+   
+   
+   
+   
+   :use JSONPath query to retrieve our OS images of all K8s nodes and store it in a file ~/allNodeOSImages8.txt
+   
+   28  clear
+   29  kubectl get nodes -o jsonpath='{.items[*].status.nodeInfo.osImage}' | tee allNodeOSImage8.txt
+   30  history
+   
+   
+   List internal IPs of all nodes of given cluster, save result to a file /root/InternalIPList
+   
+   
+   kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'
+   
+   
+   
+   
+   
+   Create a user “nec-adm". Grant nec-adm access to cluster, should have permissions to create, list, get, update, and delete pods in nec namespace 
+ 
+   
+   
+    4  alias g=kubectl 
+    5  g create ns nec 
+    6  g get ns
+    7  openssl genrsa -out nect-adm.key 2048
+    8  ls
+    9  openssl req -new -key nec-adm.key -out nec-adm.csr
+   10  openssl genrsa -out nec-adm.key 2048
+   11  openssl req -new -key nec-adm.key -out nec-adm.csr
+   12  ls
+   13  cat nec-adm.csr | base64 | tr -d "\n"
+   14  cat > necadm.yaml
+   15  g create -f necadm.yaml
+   16  g get csr 
+   17  g certificate approve nec-adm
+   18  g get csr 
+   19  cat  necrole.yaml
+   20  cat > necrole.yaml
+   21  g create -f necrole.yaml
+   22  cat > nec-role-bind.yaml
+   23  g apply -f nec-role-bind.yaml
+   24  g get rolebinding.rbac.aothorization.k8s.io
+   25  g get rolebinding.rbac.authorization.k8s.io
+   26  g get rolebinding.rbac.authorization.k8s.io -n nec
+   27  g get pods -n nec --as nec-adm 
+   28  cat > example1.yaml
+   29  g apply -f example1.yaml
+   30  g get pods -n default --as nec-adm 
+   31  g get pods -nec --as nec-adm 
+   32  g get pods -n nec --as nec-adm 
+   33  g auth can-i get pods -n nec --as nec-adm
+   34  g auth can-i get pods -n default --as nec-adm
+   35  g auth can-i list pods -n default --as nec-adm
+   36  g auth can-i list pods -n nec --as nec-adm
+   37  history 
+   
+   
+   
+apiVersion : certificates.k8s.io/v1
+kind : CertificateSigningRequest
+metadata :
+  name : nec-adm
+spec :
+  request : LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQyt6Q0NBZU1DQVFBd2dZRXhDekFKQmdOVkJBWVRBa2xPTVFzd0NRWURWUVFJREFKTFFURVNNQkFHQTFVRQpCd3dKUW1WdVoyRnNkWEoxTVE4d0RRWURWUVFLREFaRlJGTXVZV2t4RFRBTEJnTlZCQXNNQkVGSklGSXhEREFLCkJnTlZCQU1NQTJKMmNqRWpNQ0VHQ1NxR1NJYjNEUUVKQVJZVWRtbHphSGx0WVdsc2MwQm5iV0ZwYkM1amIyMHcKZ2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRREJEN2ZUaGJZYUZEc3p5NTNGa2FEbgoxTk1ESEdtMzhyMlp3SFBJekV5ZWtlV3FYdVMyUnVyM3JtUERUQ3ZFd3NsV2doRlBGY1NnK3QxQ2FiOVhTL01kCk1yUytGVHcvem9FOXptblVjY0VJTTk0RkxIMzFEU1lvTjdxMDVjZEtUYzRKWGxiRm5pbXhSeGdpUUZuM0I4aTgKa2NvYkNZajR0Z0JQQ3ppRFBXTFdoSVNjUFhId1FMTjBXVXk5QUZueUdxY2QveEVHMXZHcUI3N0pyVVAzeFJqQgppMzk2UW9zM0FlZlQvZHZZVkFkT3BLM3U4ZVJUOHNrRmxDUm5JUTZCdjlkbGJNWS96c09YWkk3Njh5dnNVUDZJClgxU2J4OXNlQ3R1Mkw4cWhGZW9xZUNGVmJHOXZWSjRxekNTRThYTHpXUnkzdEhBWi92VTR6aUpLdWhLV0k2TWwKQWdNQkFBR2dOREFWQmdrcWhraUc5dzBCQ1FJeENBd0dUM0poWTJ4bE1Cc0dDU3FHU0liM0RRRUpCekVPREF4dwpZWE56ZDI5eVpFQXhNak13RFFZSktvWklodmNOQVFFTEJRQURnZ0VCQUoxdFRCVlVHaFVqclludlVTMmZVMWJmCmlKQTJoQ3FJUlVrSUxPejFEYld5RUpEeWttRnZWZFJvZ0x4WlUzcXBmZVFEQlBPQjZ4ejJoYmpCSTdRb05tR3cKQmMySUJTSjhSU0t1NHdoSmgzKyt2N1FlU2lCMW9UWnZtelQvcTkrcWN0cHg3Skg0emNGRHpSYUZzL1AxaURXUwpTRWlab3B4VlhDVzYxdjBFN00xNlRCWkpydnJ3Z1luYWd1VHdMcnVqd2dCc3FISDJtcU5Rc09vY2g1MjJ6bTdSCis3VkJLeGVvZDBjaXkxaGxhalpQSUpaQ1dMekozTnlCUVZOQlJmTnNFVU8wUWNsZnVNd3JnY21nU0UzOFNRaDMKeTlmY1RvZnVYWFFnYlRRSDZTeHc2c2tQekVzdUd2WjVsWjlhNmxMUm0xVFRhZm5LQUdmOWxjNGQ5a3FZRERjPQotLS0tLUVORCBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0K
+  signerName : kubernetes.io/kube-apiserver-client
+  usages : 
+    - client auth
+
+    
+    
+ 
+ 
+ apiVersion : rbac.authorization.k8s.io/v1
+kind : Role 
+metadata :
+  namespace : nec 
+  name : pod-admin
+rules :
+  - apiGroups : [""]
+    resources : ["pods"]
+    verbs : ["get", "watch", "list", "create", "delete", "update"]
+
+    
+
+
+
+apiVersion : rbac.authorization.k8s.io/v1
+kind : RoleBinding
+metadata :
+  name : admin-pods 
+  namespace : nec 
+subjects :
+  - kind : User 
+    name : nec-adm
+    apiGroup : rbac.authorization.k8s.io
+roleRef :
+  kind : Role 
+  name : pod-admin 
+  apiGroup : rbac.authorization.k8s.io
+
+  
+    
+    
